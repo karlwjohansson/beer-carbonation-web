@@ -110,10 +110,6 @@ img {
     outline: none;
 }
 
-.showcase-text {
-    padding: 10px 1px;
-}
-
 /* Utilities */
 .container {
     max-width: 1100px;
