@@ -80,6 +80,25 @@ img {
     text-shadow: 3px 3px 3px rgb(153, 63, 4);
 }
 
+/* Footer */
+.footer {
+    
+    padding-top: 100px;
+}
+.footer .social a {
+margin: 0 10px;
+}
+
+.fa-github:hover {
+color: #000000;
+}
+.footer .grid {
+    grid-template-columns: none;
+}  
+.footer .flex {
+    justify-content: space-between;
+}
+
 /* Showcase */
 .showcase {
     height: 400px;
@@ -88,8 +107,8 @@ img {
     position: relative;
 }
 
-.showcase h1 {
-    font-size: 40px;
+.showcase h2 {
+    font-size: 30px;
 }
 .showcase p {
     margin: 20px 0;
@@ -126,6 +145,10 @@ img {
     outline: none;
 }
 
+.showcase-text {
+    padding: 50px;
+}
+
 .derivation {
     position: relative;
     height: 650px;
@@ -137,7 +160,7 @@ img {
 .derivation .grid {
     overflow: visible;
     grid-template-columns: 50% 50%;
-    gap: 30px;
+    gap: 15px;
 }
 
 .derivation-text {
@@ -215,8 +238,9 @@ img {
     height: 100%;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 768px) {
     .grid,
+    .footer,
     .showcase .grid,
     .derivation .grid {
         grid-template-columns: 1fr;
@@ -231,6 +255,7 @@ img {
     .showcase-text {
         text-align: center;
         margin-top: 40px;
+        padding: 0;
         animation: slideInFromTop 1s ease-in;
     }
     .showcase-form {
@@ -239,9 +264,67 @@ img {
         animation: slideInFromBottom 1s ease-in;
     }
     .derivation-text {
+        justify-content: center;
+        margin: auto;
         text-align: center;
-        margin: 20px;
         animation: slideInFromLeft 1s ease-in;
     }
 
+}
+
+/* Animations */
+@keyframes slideInFromLeft {
+    0% {
+      transform: translateX(-100%);
+    }
+  
+    100% {
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes slideInFromRight {
+    0% {
+      transform: translateX(100%);
+    }
+  
+    100% {
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes slideInFromTop {
+    0% {
+      transform: translateY(-100%);
+    }
+  
+    100% {
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes slideInFromBottom {
+    0% {
+      transform: translateY(100%);
+    }
+  
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+@media (max-width: 500px) {
+    .navbar {
+        height: 160px;
+    }
+    .navbar .flex {
+        flex-direction: colmn;
+    }
+    .navbar ul {
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+    .showcase-form {
+        width: 300px;
+    }
 }
