@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<style>
+* {
+    box-sizing: border-box;
+}
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+.flex-item-left {
+    padding: 10px;
+    flex: 60%;
+}
+.flex-item-right {
+    padding: 10px;
+    flex: 40%;
+}
+@media (max-width: 800px)
+{
+    .flex-item-right, .flex-item-left {
+        flex: 100%;
+    }
+}
+header {
+    padding: 20px;
+    text-align: center;
+}
+body {
+    background-color: bisque;
+}
+h1 {
+    color: coral;
+    text-align: center;
+}
+input[type=number] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+input[type=number]:focus {
+    background-color: lightyellow;
+}
+input[type=button] {
+    background-color: darksalmon;
+    border: none;
+    color: black;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+.info {
+    font-family: Verdana;
+    padding: 5px;
+    border: 1px solid red;
+}
+.p-div {
+    font-family: Verdana;
+    padding: 2px;
+    border: 1px solid red;
+}
+</style>
+<div class="header">
+<h1>Deltakalk</h1>
+
+</div>
+<body>
+<div class="flex-container">
+    <div class="flex-item-left">
+        <div class="info">
+            Den här kalkylatorn är skapad som hjälpmedel när man vill flaska redan
+            kolsyrat öl (från t.ex. fat) samt addera ytterligare socker för att nå
+            högre volymer av CO<sub>2</sub> än vad som är enkelt att hantera i tryckkärl.
+            Beräkningen sker i tre steg:<br>
+            <ul>
+                <li>Beräkna nuvarande nivå av CO<sub>2</sub> i gram/liter (<a href="http://braukaiser.com/wiki/index.php/Carbonation_Tables">länk till Braukaiser</a>)</li>
+                <li>Omvandla gram/liter till Volymer (<a href="https://www.sciencedirect.com/topics/agricultural-and-biological-sciences/carbonation#:~:text=Carbonation%20is%20measured%20as%20either%20%E2%80%98volumes%E2%80%99%20or%20grams,to%201.96%20g%2FL%20%28normally%20quoted%20as%202%20g%2FL%29.">länk till Science direct</a>)</li>
+                <li>Beräkna sockermängd att tillsätta (<a href="http://braukaiser.com/wiki/index.php?title=Accurately_Calculating_Sugar_Additions_for_Carbonation#:~:text=The%20formula%20for%20calculating%20the%20carbonation%20when%20priming,-%20the%20final%20carbonation%20of%20the%20beer%20%28g%2Fl%29">länk till Braukaiser</a>)</li>
+            </ul>
+            <br>
+            Nedbrytning av ekvationerna:<br>
+            <tt>C<sub>beer</sub> = (P<sub>head</sub>+1.013)*(2.71828182845904^(-10.73797+(2617.25/(T<sub>beer</sub>+273.15))))*10</tt> (1)
+            <ul>
+                <li>C<sub>beer</sub> är mängden kolsyra i ölet i gram/liter</li>
+                <li>P<sub>head</sub> är trycket i ölet i bar</li>
+                <li>T<sub>beer</sub> är temperaturen i ölet i grader Celsius</li>
+            </ul>
+            <tt>C<sub>beer_volumes</sub> = C<sub>beer</sub>/1.96</tt> (2)
+            <ul>
+                <li>C<sub>beer_volumes</sub> är mängden kolsyre i ölet i Volymer</li>
+            </ul>
+            <tt>m<sub>sugar</sub> = ((C<sub>desired_co<sub>2</sub></sub> - C<sub>beer</sub>)*V<sub>beer</sub>)/0.5</tt> (3)
+            <br>
+            <ul>
+                <li>m<sub>sugar</sub> är mängden socker i gram</li>
+                <li>C<sub>desired_co<sub>2</sub></sub> är önskad kolsyra i ölet i gram/liter</li>
+                <li>C<sub>beer</sub> är kolsyra i ölet i gram/liter</li>
+                <li>V<sub>beer</sub> är volymen öl i liter</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="flex-item-right">
+        <form id="first">
+            <label for="tbeer">T<sub>beer</sub> (Celsius): </label>
+            <input type="number" name="tbeer">
+            <label for="pbeer">P<sub>beer</sub> (Bar): </label>
+            <input type="number" name="pbeer">
+            <label for="wish_co2">Önskad Vol CO<sub>2</sub></label>
+            <input type="number" name="wish_co2">
+            <label for="beer_volume">Mängd öl i liter</label>
+            <input type="number" name="beer_volume">
+        </form>
+        <input type="button" onclick="loadElements()" value="Beräkna">
+        <div class="p-div">
+            <p id="current_co2">Nuvarande CO<sub>2</sub> i g/l:</p>
+            <p id="convert_vol">Nuvarande CO<sub>2</sub> i Vol:</p>
+            <p id="des_vol">Önskad nivå CO<sub>2</sub> i Vol:</p>
+            <p id="sugar_addition">Mängd socker att tillsätta i g:</p>        
+        </div>       
+        
+    </div>
+</div>
+<script>
+    function loadElements() {
+        let x =document.getElementById("first")
+        let T = parseFloat(x.elements[0].value);
+        let P = parseFloat(x.elements[1].value);
+        let Des_Vol = parseFloat(x.elements[2].value);
+        let Des_co2 = Des_Vol*1.96;
+        let beer_vol = parseFloat(x.elements[3].value);
+        document.getElementById("current_co2").innerHTML = "Nuvarande CO<sub>2</sub> i g/l: " + getCurrentCo2Amount(T, P).toFixed(2);
+        document.getElementById("convert_vol").innerHTML = "Nuvarande CO<sub>2</sub> i Vol: " + convertToVol(getCurrentCo2Amount(T, P)).toFixed(2);
+        document.getElementById("des_vol").innerHTML = "Önskad nivå CO<sub>2</sub> i g/l: " + Des_co2;
+        document.getElementById("sugar_addition").innerHTML = "Mängd socker att tillsätta i g: " + sugarAddition(Des_co2, getCurrentCo2Amount(T, P), beer_vol).toFixed(2);
+    }
+    function getCurrentCo2Amount(T, P) {
+        let Cbeer;
+        Cbeer = ((P + 1.013) * (2.71828182845904 ** (-10.73797 + (2617.25 / (T + 273.15)))) * 10);
+        return Cbeer;
+    }
+    function convertToVol(C) {
+        return C/1.96;
+    }
+    function sugarAddition(Des_co2, Cbeer, beer_vol) {
+        return ((Des_co2 - Cbeer)*beer_vol)/0.5;
+    }
+
+</script>
+
+</body>
+</html> 
