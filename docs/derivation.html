@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Keg to bottle carbonation calculator</title>
+</head>
+<body>
+    <!-- NavBar -->
+    <div class="navbar">
+        <div class="container flex">
+            <div class="grid">
+            <!-- <h1 class="logo">Keg to bottle carbonation</h1> -->
+                <i class='fa fa-beer fa-3x'> K2bc</i>
+                <h3 class="logo"> Keg to bottle carbonation</h3>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Calculator</a></li>
+                    <li><a href="derivation.html">Derivation</a></li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+    <!-- Showcase-->
+    <section class="derivation">
+        <div class="container grid">
+            <div class="derivation-text card">
+                <h3>The intent of this calculator</h3>
+                Some beers benefit from higher levels of CO<sub>2</sub>. If you want to partially carbonate a beer
+                in a keg and the bottle you might want to add sugar to the beer in order to reach a higher level of 
+                CO<sub>2</sub> in the bottle this calculator can provide you an estimated amount of sugar to add.
+
+                The equations are assumed to operate in ideal conditions which is obviously not how reality works. 
+                Depening on your method of transfer/adding sugar etc. there are losses which are not accounted for
+                in the equations. Therefore the amount of sugar might not land you the precise amount of CO<sub>2</sub>
+                stated. Use the amount of sugar as an entery point and then experiment to reach you prefered carbonation.
+                
+                The calculation of sugar is divided into three steps:<br>
+                <ul>
+                    <li>Calculate the current level of CO<sub>2</sub> in grams/liter (<a href="http://braukaiser.com/wiki/index.php/Carbonation_Tables">link to Braukaiser</a>)</li>
+                    <li>Transform grams/liter into Volumes (<a href="https://www.sciencedirect.com/topics/agricultural-and-biological-sciences/carbonation#:~:text=Carbonation%20is%20measured%20as%20either%20%E2%80%98volumes%E2%80%99%20or%20grams,to%201.96%20g%2FL%20%28normally%20quoted%20as%202%20g%2FL%29.">link to Science direct</a>)</li>
+                    <li>Calculate the amount of sugar to add (<a href="http://braukaiser.com/wiki/index.php?title=Accurately_Calculating_Sugar_Additions_for_Carbonation#:~:text=The%20formula%20for%20calculating%20the%20carbonation%20when%20priming,-%20the%20final%20carbonation%20of%20the%20beer%20%28g%2Fl%29">link to Braukaiser</a>)</li>
+                </ul>
+                <br>
+            </div>
+            <div class="derivation-text card">
+                <h3>Breakdown of equations:</h3>
+                <tt>C<sub>beer</sub> = (P<sub>head</sub>+1.013)*2.71828182845904<sup>-10.73797+(2617.25/(T<sub>beer</sub>+273.15))</sup>*10</tt>
+                <ul>
+                    <li>C<sub>beer</sub> is the amount of CO<sub>2</sub> in the beer in grams/liter</li>
+                    <li>P<sub>head</sub> is the head pressure in the beer in Bar</li>
+                    <li>T<sub>beer</sub> is the temperature of the beer in Celsius</li>
+                </ul>
+                <tt>C<sub>beer_volumes</sub> = C<sub>beer</sub>/1.96</tt>
+                <ul>
+                    <li>C<sub>beer_volumes</sub> is the amount of CO<sub>2</sub> in the beer in Volumes</li>
+                </ul>
+                <tt>m<sub>sugar</sub> = ((C<sub>desired_co<sub>2</sub></sub> - C<sub>beer</sub>)*V<sub>beer</sub>)/0.5</tt>
+                <br>
+                <ul>
+                    <li>m<sub>sugar</sub> is the amount of table sugar in grams</li>
+                    <li>C<sub>desired_co<sub>2</sub></sub> is the desired level of CO<sub>2</sub> in grams/liter</li>
+                    <li>C<sub>beer</sub> is the current amount of CO<sub>2</sub> in the beer in grams/liter</li>
+                    <li>V<sub>beer</sub> is the beer volume in liters</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

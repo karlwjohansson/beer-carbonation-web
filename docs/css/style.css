@@ -43,7 +43,7 @@ img {
 .navbar {
     background-color: var(--primary-color);
     color: #fff;
-    height: 70px;
+    height: 90px;
 }
 
 .navbar ul {
@@ -64,6 +64,22 @@ img {
     justify-content: space-between;
 }
 
+.navbar .grid {
+    grid-template-columns: none;
+    gap: 2px;
+
+    /* grid-template-rows: repeat(2, 1fr); */
+}
+
+.navbar i {
+    font-family: 'Lato' sans-serif;
+    text-shadow: 3px 3px 3px #754f4f;
+}
+
+.navbar i:hover {
+    text-shadow: 3px 3px 3px rgb(153, 63, 4);
+}
+
 /* Showcase */
 .showcase {
     height: 400px;
@@ -81,7 +97,7 @@ img {
 
 .showcase .grid {
     overflow: visible;
-    grid-template-columns: 45% 55%;
+    grid-template-columns: 50% 50%;
     gap: 30px;
 }
 
@@ -110,6 +126,42 @@ img {
     outline: none;
 }
 
+.derivation {
+    position: relative;
+    height: 650px;
+    background-color: var(--primary-color);
+    color: #fff;
+    position: relative;    
+}
+
+.derivation .grid {
+    overflow: visible;
+    grid-template-columns: 50% 50%;
+    gap: 30px;
+}
+
+.derivation-text {
+    top: 0;
+    height: 600px;
+    width: 400px;
+    padding: 0;
+    z-index: 100;    
+}
+
+.derivation tt {
+    font-size: 16px;
+    background-color: #d3d8e0;
+    margin: 0 10px;
+}
+
+.derivation ul {
+    padding: 15px;
+    font-size: 14px;
+}
+
+.derivation a:hover {
+    background-color: #d3d8e0;
+}
 /* Utilities */
 .container {
     max-width: 1100px;
@@ -161,4 +213,35 @@ img {
     justify-content: center;
     align-items: center;
     height: 100%;
+}
+
+@media (max-width: 800px) {
+    .grid,
+    .showcase .grid,
+    .derivation .grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+    }
+    .showcase {
+        height: auto;
+    }
+    .derivation {
+        height: auto;
+    }
+    .showcase-text {
+        text-align: center;
+        margin-top: 40px;
+        animation: slideInFromTop 1s ease-in;
+    }
+    .showcase-form {
+        justify-content: center;
+        margin: auto;
+        animation: slideInFromBottom 1s ease-in;
+    }
+    .derivation-text {
+        text-align: center;
+        margin: 20px;
+        animation: slideInFromLeft 1s ease-in;
+    }
+
 }
