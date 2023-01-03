@@ -332,5 +332,9 @@ color: #000000;
     .derivation-text {
         width: 380px;
         height: auto;
+        text-align: left;
+    }
+    .derivation-text tt {
+        margin: 0 0;
     }
 }
