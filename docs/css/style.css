@@ -267,7 +267,7 @@ color: #000000;
         justify-content: center;
         margin: auto;
         text-align: center;
-        animation: slideInFromLeft 1s ease-in;
+        animation: slideInFromBottom 1s ease-in;
     }
 
 }
@@ -326,5 +326,9 @@ color: #000000;
     }
     .showcase-form {
         width: 300px;
+    }
+    .derivation-text {
+        width: 400px;
+        height: auto;
     }
 }
