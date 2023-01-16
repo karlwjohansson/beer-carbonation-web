@@ -49,15 +49,30 @@
                 </form>
             </div>
             <div class="showcase-text">
-                <h2>
-                    Carbonation data
-                </h2>
-                <p id="current_co2">Current CO<sub>2</sub> level in grams/liter:</p>
-                <p id="convert_vol">Current CO<sub>2</sub> level in Volumes:</p>
-                <p id="des_vol">Desired CO<sub>2</sub> level in grams/liter:</p>
-                <p id="sugar_addition">Amount of sugar to add in grams:</p>            
+                <table>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>value</th>
+                    </tr>
+                    <tr>
+                        <td>Current CO<sub>2</sub> level in g/l</td>
+                        <td id = "current_co2"></td>
+                    </tr>
+                    <tr>
+                        <td>Current CO<sub>2</sub> level in Vol</td>
+                        <td id = "convert_vol"></td>
+                    </tr>
+                    <tr>
+                        <td>Desired CO<sub>2</sub> level in g/l</td>
+                        <td id = "desVol"></td>
+                    </tr>
+                    <tr>
+                        <td>Amount of sugar to add in g</td>
+                        <td id = "sugar_addition"></td>
+                    </tr>
+                </table>
+                <p id="syrup"></p>
             </div>
-
         </div>
     </section>    
     <!-- Footer -->
@@ -68,6 +83,9 @@
                 </h2>
                 <p>Created by Karl Johansson</p>
             </div>
+            <div class="notice">
+                <b>Important!</b> Adding too much sugar when bottling beer may cause explosions. Please be careful and use this calculator at your own risk. I do not take responsibility for any wrongful use of this calculator.
+            </div>
             <div class="social">
                 <a href="https://github.com/karlwjohansson/beer-carbonation-web"><i class="fab fa-github fa-2x"></i></a>
             </div>
@@ -77,46 +95,53 @@
 <script>
     function loadForm() {
         let x =document.getElementById("first");
-        let T = parseFloat(x.elements[0].value);
-        let P = parseFloat(x.elements[1].value);
-        let Des_Vol = parseFloat(x.elements[2].value);
-        let Des_Co2 = Des_Vol*1.96;
-        let Beer_Vol = parseFloat(x.elements[3].value);
-        let Reset_Index = 1.0;
-        loadElements(T, P, Des_Co2, Beer_Vol, Reset_Index);
-        /*
-        document.getElementById("current_co2").innerHTML = "Current CO<sub>2</sub> level in grams/liter: " + getCurrentCo2Amount(T, P).toFixed(2);
-        document.getElementById("convert_vol").innerHTML = "Current CO<sub>2</sub> level in Volules: " + convertToVol(getCurrentCo2Amount(T, P)).toFixed(2);
-        document.getElementById("des_vol").innerHTML = "Desired CO<sub>2</sub> level in grams/liter: " + Des_Co2.toFixed(2);
-        document.getElementById("sugar_addition").innerHTML = "Amount of sugar to add in grams: " + sugarAddition(Des_Co2, getCurrentCo2Amount(T, P), Beer_Vol).toFixed(2);
-        */
+        let t = parseFloat(x.elements[0].value);
+        let p = parseFloat(x.elements[1].value);
+        let desVol = parseFloat(x.elements[2].value);
+        let desCo2 = desVol*1.96;
+        let beerVol = parseFloat(x.elements[3].value);
+        let resetIndex = 1.0;
+        loadElements(t, p, desCo2, beerVol, resetIndex);
     }
-    function loadElements(T, P, Des_Co2, Beer_Vol, Reset_Index) {
-        document.getElementById("current_co2").innerHTML = "Current CO<sub>2</sub> level in grams/liter: " + getCurrentCo2Amount(T, P, Reset_Index).toFixed(1);
-        document.getElementById("convert_vol").innerHTML = "Current CO<sub>2</sub> level in Volumes: " + convertToVol(getCurrentCo2Amount(T, P, Reset_Index)).toFixed(1);
-        document.getElementById("des_vol").innerHTML = "Desired CO<sub>2</sub> level in grams/liter: " + Des_Co2.toFixed(1);
-        document.getElementById("sugar_addition").innerHTML = "Amount of sugar to add in grams: " + sugarAddition(Des_Co2, getCurrentCo2Amount(T, P, Reset_Index), Beer_Vol).toFixed(0);    
+    function loadElements(t, p, desCo2, beerVol, resetIndex) {
+        let Cbeer = getCurrentCo2Amount(t, p, resetIndex).toFixed(2);
+        let convertVol = convertToVol(getCurrentCo2Amount(t, p, resetIndex)).toFixed(2);
+        let sugarAdd = sugarAddition(desCo2, getCurrentCo2Amount(t, p, resetIndex), beerVol).toFixed(2);
+
+        document.getElementById("current_co2").innerHTML = Cbeer;
+        document.getElementById("convert_vol").innerHTML = convertVol;
+        document.getElementById("desVol").innerHTML = desCo2.toFixed(2);
+        document.getElementById("sugar_addition").innerHTML = sugarAdd;
+        /*document.getElementById("syrup").innerHTML = "Concentration " + syrup(sugarAdd, beerVol)[0].toFixed(2) + " inc Concentration " + syrup(sugarAdd, beerVol)[1].toFixed(2) + " Syrup volume " + syrup(sugarAdd, beerVol)[2].toFixed(2);*/
+        document.getElementById("syrup").innerHTML = "Make a syrup by boiling <b>" + syrup(sugarAdd, beerVol)[1].toFixed(2) + "g</b> of table sugar in <b>" + syrup(sugarAdd, beerVol)[2].toFixed(2) + "ml</b> of water. These amounts are increased 20% from what is needed to account for losses. Add the following amounts to each bottle: <br> <table><tr><th>Bottle size</th><th>syrup to add</th></tr><tr><td>33cl</td><td>2ml</td></tr><tr><td>50cl</td><td>3ml</td></tr><tr><td>75cl</td><td>4ml</td></tr></table>";
     }
-    function getCurrentCo2Amount(T, P, Reset_Index) {
+    function getCurrentCo2Amount(t, p, resetIndex) {
         let Cbeer;
-        Cbeer = ((P + 1.013) * (2.71828182845904 ** (-10.73797 + (2617.25 / (T + 273.15)))) * 10) * Reset_Index;
+        Cbeer = ((p + 1.013) * (2.71828182845904 ** (-10.73797 + (2617.25 / (t + 273.15)))) * 10) * resetIndex;
         return Cbeer;
     }
     function convertToVol(C) {
         return C/1.96;
     }
-    function sugarAddition(Des_Co2, Cbeer, Beer_Vol) {
-        return ((Des_Co2 - Cbeer)*Beer_Vol)/0.5;
+    function sugarAddition(desCo2, Cbeer, beerVol) {
+        return ((desCo2 - Cbeer)*beerVol)/0.5;
+    }
+    function syrup(sugarAdd, beerVol) {
+        let concentration = sugarAdd/beerVol;
+        let incBeerVol = beerVol*1.2;
+        let incSugarAdd = incBeerVol*concentration;
+        let syrupVol = incBeerVol*6; /* A dosing volume of 6ml / liter beer */
+        return([concentration, incSugarAdd, syrupVol])
     }
     function resetForm() {
         document.getElementById("first").reset();
-        T = 0.0;
-        P = 0.0;
-        Des_Vol = 0.0;
-        Des_Co2 = 0.0;
-        Beer_Vol = 0.0;
-        Reset_Index = 0.0;
-        loadElements(T, P, Des_Co2, Beer_Vol, Reset_Index);
+        t = 0.0;
+        p = 0.0;
+        desVol = 0.0;
+        desCo2 = 0.0;
+        beerVol = 0.0;
+        resetIndex = 0.0;
+        loadElements(t, p, desCo2, beerVol, resetIndex);
     }
 </script>
 </html>
