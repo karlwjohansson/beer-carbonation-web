@@ -67,8 +67,12 @@
                         <td id = "desVol"></td>
                     </tr>
                     <tr>
-                        <td>Amount of sugar to add in g</td>
+                        <td>Amount of table sugar to add in g</td>
                         <td id = "sugar_addition"></td>
+                    </tr>
+                    <tr>
+                        <td>Amount of corn sugar (dextrose) to add in g</td>
+                        <td id = "corn_addition"></td>
                     </tr>
                 </table>
                 <p id="syrup"></p>
@@ -107,13 +111,15 @@
         let Cbeer = getCurrentCo2Amount(t, p, resetIndex).toFixed(2);
         let convertVol = convertToVol(getCurrentCo2Amount(t, p, resetIndex)).toFixed(2);
         let sugarAdd = sugarAddition(desCo2, getCurrentCo2Amount(t, p, resetIndex), beerVol).toFixed(2);
+        let cornAdd = cornAddition(desCo2, getCurrentCo2Amount(t, p, resetIndex), beerVol).toFixed(2);
 
         document.getElementById("current_co2").innerHTML = Cbeer;
         document.getElementById("convert_vol").innerHTML = convertVol;
         document.getElementById("desVol").innerHTML = desCo2.toFixed(2);
         document.getElementById("sugar_addition").innerHTML = sugarAdd;
+        document.getElementById("corn_addition").innerHTML = cornAdd;
         /*document.getElementById("syrup").innerHTML = "Concentration " + syrup(sugarAdd, beerVol)[0].toFixed(2) + " inc Concentration " + syrup(sugarAdd, beerVol)[1].toFixed(2) + " Syrup volume " + syrup(sugarAdd, beerVol)[2].toFixed(2);*/
-        document.getElementById("syrup").innerHTML = "Make a syrup by boiling <b>" + syrup(sugarAdd, beerVol)[1].toFixed(2) + "g</b> of table sugar in <b>" + syrup(sugarAdd, beerVol)[2].toFixed(2) + "ml</b> of water. These amounts are increased 20% from what is needed to account for losses. Add the following amounts to each bottle: <br> <table><tr><th>Bottle size</th><th>syrup to add</th></tr><tr><td>33cl</td><td>2ml</td></tr><tr><td>50cl</td><td>3ml</td></tr><tr><td>75cl</td><td>4.5ml</td></tr></table>";
+        document.getElementById("syrup").innerHTML = "Make a syrup by boiling <b>" + syrup(sugarAdd, cornAdd, beerVol)[2].toFixed(2) + "g</b> of table sugar or <b>" + syrup(sugarAdd, cornAdd, beerVol)[3].toFixed(2) + "g</b> of corn sugar in " + syrup(sugarAdd, cornAdd, beerVol)[4].toFixed(2) + "ml</b> of water. These amounts are increased 20% from what is needed to account for losses. Add the following amounts to each bottle: <br> <table><tr><th>Bottle size</th><th>syrup to add</th></tr><tr><td>33cl</td><td>2ml</td></tr><tr><td>50cl</td><td>3ml</td></tr><tr><td>75cl</td><td>4.5ml</td></tr></table>";
     }
     function getCurrentCo2Amount(t, p, resetIndex) {
         let Cbeer;
@@ -126,12 +132,17 @@
     function sugarAddition(desCo2, Cbeer, beerVol) {
         return ((desCo2 - Cbeer)*beerVol)/0.5;
     }
-    function syrup(sugarAdd, beerVol) {
-        let concentration = sugarAdd/beerVol;
+    function cornAddition(desCo2, Cbeer, beerVol) {
+        return ((desCo2 - Cbeer)*beerVol)/(0.5*0.91);
+    }
+    function syrup(sugarAdd, cornAdd, beerVol) {
+        let sugar_concentration = sugarAdd/beerVol;
+        let corn_concentration = cornAdd/beerVol;
         let incBeerVol = beerVol*1.2;
-        let incSugarAdd = incBeerVol*concentration;
+        let incSugarAdd = incBeerVol*sugar_concentration;
+        let incCornAdd = incBeerVol*corn_concentration;
         let syrupVol = incBeerVol*6; /* A dosing volume of 6ml / liter beer */
-        return([concentration, incSugarAdd, syrupVol])
+        return([sugar_concentration, corn_concentration, incSugarAdd, incCornAdd, syrupVol])
     }
     function resetForm() {
         document.getElementById("first").reset();
