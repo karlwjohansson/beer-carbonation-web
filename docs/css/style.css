@@ -117,7 +117,7 @@ color: #000000;
 
 .showcase .grid {
     overflow: visible;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 30px;
 }
 
@@ -147,7 +147,7 @@ color: #000000;
 }
 
 .showcase-text {
-    margin: 70px;
+    margin: 35px;
     text-align: left;
 }
 .showcase-text table {
@@ -174,7 +174,7 @@ color: #000000;
 
 .derivation .grid {
     overflow: visible;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: repeat(3, 1fr);
     gap: 15px;
 }
 
